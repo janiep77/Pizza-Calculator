@@ -1,9 +1,11 @@
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-
+import java.awt.*;
+import java.awt.event.*;
 
 /**
  * 
@@ -37,10 +39,18 @@ public class PizzaCalc {
 	        text3 = new JTextField(20);
 	        text4 = new JTextField(20);
 	        
-	        int numPairs = 4;
+			text4.setEnabled(false);
+
+	        int numPairs = 5;
 	 
 	        
 	        p = new JPanel(new SpringLayout());
+
+			JButton btnCalculate	= new JButton("Calculate");
+			JButton btnClear 		= new JButton("Clear");
+			
+			btnClear.addActionListener(new ClearActionListener());
+			btnCalculate.addActionListener(new CalculateActionListener());
 	        
 	        p.add(label1);
 	        p.add(text1);
@@ -50,6 +60,8 @@ public class PizzaCalc {
 	        p.add(text3);
 	        p.add(label4);
 	        p.add(text4);
+			p.add(btnCalculate);
+			p.add(btnClear);
 
 		   //this isn't mine 
 	        SpringUtilities.makeCompactGrid(p, numPairs, 2, 6, 6, 6, 6);       
@@ -73,26 +85,38 @@ public class PizzaCalc {
 
         PizzaCalc p = new PizzaCalc();
         p.go();
-        p.calculate();
 	}
 	public void calculate(){
         
 		double sum = 0;
 		double pi = 3.14;
-		if (!text1.getText().isEmpty()) {
+		if (text1.getText().isEmpty()) {
 			sum = 0;
-		} else if (!text2.getText().isEmpty()) {
+		} else if (text2.getText().isEmpty()) {
 			sum = 0;
-		} else if(!text3.getText().isEmpty()){
+		} else if(text3.getText().isEmpty()){
 			sum = 0;
 		} else {
-			sum = (Double)(Double.parseDouble(text1.getText()) 
-					/ (pi * Double.parseDouble(text2.getText()) 
+			sum = Double.parseDouble(text1.getText()) 
+					/((pi * Double.parseDouble(text2.getText()) 
 					* Double.parseDouble(text2.getText()) 
 					* Double.parseDouble(text3.getText())));
 		}
-		text4.setText(String.valueOf(sum));
+		text4.setText(String.format("%.2f", sum));
 
 	}
-	 
+
+	class CalculateActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent event){
+			calculate();
+		}
+	}
+	class ClearActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent event){
+			text1.setText("");
+			text2.setText("");
+			text3.setText("");
+			text4.setText("");
+		}
+	}
 }
